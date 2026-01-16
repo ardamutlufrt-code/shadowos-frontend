@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShadowOS — Kayıt</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page page--center">
+  <header class="nav nav--minimal">
+    <a href="index.html" class="nav__left">
+      <img src="logo.svg" alt="ShadowOS" class="logo" />
+      <span class="brand">ShadowOS</span>
+    </a>
+    <a href="login.html" class="btn btn--ghost">Giriş</a>
+  </header>
+
+  <main class="auth">
+    <div class="auth__card card card--soft">
+      <h1>Kayıt ol</h1>
+      <p class="muted">Paneli açmak için e-postanı gir. (Demo)</p>
+
+      <form id="signupForm" class="form">
+        <label class="label">E-posta</label>
+        <input id="email" type="email" placeholder="ornek@mail.com" required />
+        <label class="label">Şifre</label>
+        <input id="password" type="password" placeholder="••••••••" minlength="6" required />
+        <button class="btn btn--block" type="submit">Hesabı Oluştur</button>
+        <p class="muted tiny">Not: Bu MVP sürümünde bilgiler cihazında saklanır (localStorage).</p>
+      </form>
+
+      <div class="divider"></div>
+      <p class="muted small">Zaten hesabın var mı? <a class="link" href="login.html">Giriş yap</a></p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      if(!email || !password) return;
+      localStorage.setItem("shadowos_user", JSON.stringify({ email: email, createdAt: Date.now(), tier: "owner" }));
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

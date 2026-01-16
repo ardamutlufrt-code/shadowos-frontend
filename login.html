@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShadowOS — Giriş</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page page--center">
+  <header class="nav nav--minimal">
+    <a href="index.html" class="nav__left">
+      <img src="logo.svg" alt="ShadowOS" class="logo" />
+      <span class="brand">ShadowOS</span>
+    </a>
+    <a href="signup.html" class="btn btn--ghost">Kayıt</a>
+  </header>
+
+  <main class="auth">
+    <div class="auth__card card card--soft">
+      <h1>Giriş yap</h1>
+      <p class="muted">Hesabına giriş yap ve kanalını analiz et.</p>
+
+      <form id="loginForm" class="form">
+        <label class="label">E-posta</label>
+        <input id="email" type="email" placeholder="ornek@mail.com" required />
+        <label class="label">Şifre</label>
+        <input id="password" type="password" placeholder="••••••••" required />
+        <button class="btn btn--block" type="submit">Giriş</button>
+      </form>
+
+      <div class="divider"></div>
+      <p class="muted small">Hesabın yok mu? <a class="link" href="signup.html">Kayıt ol</a></p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      if(!email) return;
+      // Demo login: accept any password
+      localStorage.setItem("shadowos_user", JSON.stringify({ email: email, createdAt: Date.now(), tier: "owner" }));
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

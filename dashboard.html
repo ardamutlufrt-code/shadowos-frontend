@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShadowOS — Panel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav nav--glass">
+    <div class="nav__left">
+      <img src="logo.svg" alt="ShadowOS" class="logo" />
+      <span class="brand">ShadowOS</span>
+    </div>
+    <div class="nav__right">
+      <span class="muted small" id="userEmail"></span>
+      <button class="btn btn--ghost" id="logoutBtn" type="button">Çıkış</button>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="pageHeader">
+      <div>
+        <h1>Panel</h1>
+        <p class="muted">Instagram kanalını analiz et → eksikleri bul → 3 paketli ürün & içerik planı çıkar.</p>
+      </div>
+      <a class="btn" href="analyzer.html">AI Analize Başla</a>
+    </div>
+
+    <div class="grid3">
+      <a href="analyzer.html" class="card card--hover">
+        <div class="kicker">🔍 Analyzer</div>
+        <h3>Kanal Analizi</h3>
+        <p class="muted">Kanalın hangi konularda video yaptığını ve içerik boşluklarını tespit eder.</p>
+      </a>
+
+      <div class="card card--hover">
+        <div class="kicker">💿 Product Engine</div>
+        <h3>3 Paketli Ürün</h3>
+        <p class="muted">PDF (ucuz) → Video eğitim (orta) → 1:1 görüşme (premium).</p>
+      </div>
+
+      <div class="card card--hover">
+        <div class="kicker">🎥 Content Engine</div>
+        <h3>İçerik Planı</h3>
+        <p class="muted">30 gün reel planı: Hook + senaryo + CTA ile ürün satışına bağlar.</p>
+      </div>
+    </div>
+
+    <div class="card card--outline" style="margin-top:18px">
+      <h3>Not</h3>
+      <p class="muted">Bu sürüm MVP’dir. Gerçek “AI yönetimli” analiz için bir backend + OpenAI API bağlantısı eklenince,
+      linkten içerik çekme ve gerçek kanalı okuma devreye girer.</p>
+    </div>
+  </main>
+
+  <script>
+    const userRaw = localStorage.getItem("shadowos_user");
+    if(!userRaw){
+      window.location.href = "login.html";
+    } else {
+      try {
+        const user = JSON.parse(userRaw);
+        document.getElementById("userEmail").textContent = user.email || "";
+      } catch(e) {}
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", function(){
+      localStorage.removeItem("shadowos_user");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

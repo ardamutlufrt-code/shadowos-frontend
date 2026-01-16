@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShadowOS — AI Creator Intelligence</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav nav--glass">
+    <div class="nav__left">
+      <img src="logo.svg" alt="ShadowOS" class="logo" />
+      <span class="brand">ShadowOS</span>
+    </div>
+    <div class="nav__right">
+      <a href="login.html" class="btn btn--ghost">Giriş</a>
+      <a href="signup.html" class="btn">Ücretsiz Başla</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero hero--gradient">
+      <div class="hero__content">
+        <div class="pill">🕶 Shadow Operator Intelligence</div>
+        <h1>Kanalını analiz et. Eksiklerini bul. Dijital ürününü paketle.</h1>
+        <p class="muted">
+          Instagram kanalın için: içerik haritası + eksik tespiti + 3 kademeli dijital ürün (PDF → Video → 1:1).
+          Hepsi tek panelde.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--lg" href="signup.html">Kanalımı İncelet</a>
+          <a class="btn btn--lg btn--ghost" href="#how">Nasıl çalışır?</a>
+        </div>
+
+        <div class="hero__stats">
+          <div class="stat">
+            <div class="stat__num">3</div>
+            <div class="stat__label">Paket modeli</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">30</div>
+            <div class="stat__label">Gün içerik planı</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">1</div>
+            <div class="stat__label">Panel, tek akış</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__card">
+        <div class="card card--soft">
+          <div class="card__title">Hızlı Demo</div>
+          <p class="muted small">E-posta bırak, panele gir ve kanalını incele.</p>
+
+          <form id="leadForm" class="form">
+            <label class="label">E-posta</label>
+            <input id="leadEmail" type="email" placeholder="ornek@mail.com" required />
+            <button class="btn btn--block" type="submit">Devam Et</button>
+            <p class="muted tiny">Göndererek şartları kabul etmiş olursun. (Demo)</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <h2>Nasıl çalışır?</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="kicker">1) Kanal Okuma</div>
+          <h3>Konuları ve tekrarları tespit</h3>
+          <p class="muted">Kanalının hangi konularda video ürettiğini çıkarır, içerik boşluklarını yakalar.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">2) Ürün Motoru</div>
+          <h3>3 kademeli ürün</h3>
+          <p class="muted">Ucuz: PDF / yazılı rehber • Orta: video eğitim • Premium: 1:1 görüşme.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">3) İçerik Üretimi</div>
+          <h3>Satışa bağlayan içerikler</h3>
+          <p class="muted">Hook + senaryo + CTA ile ürünlerine hizmet eden içerik planı üretir.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <h2>Kimler için?</h2>
+      <div class="grid2">
+        <div class="card card--outline">
+          <h3>Creator / Influencer</h3>
+          <p class="muted">Kanalını büyüt, takipçiyi müşteriye çevir, sürdürülebilir ürün sistemi kur.</p>
+        </div>
+        <div class="card card--outline">
+          <h3>Ajans / Danışman</h3>
+          <p class="muted">Müşteri hesaplarını hızlı analiz et, teklif & ürün paketini otomatik çıkar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="ctaBox">
+        <div>
+          <h2>Hemen başla</h2>
+          <p class="muted">Kanalını analiz et, 3 paketli ürün modelini çıkar ve içerik planını oluştur.</p>
+        </div>
+        <a class="btn btn--lg" href="signup.html">Ücretsiz Başla</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="muted">© 2026 ShadowOS • Creator Intelligence</div>
+  </footer>
+
+  <script>
+    // Simple lead capture for demo (no backend)
+    document.getElementById("leadForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const email = document.getElementById("leadEmail").value.trim();
+      if(!email) return;
+      localStorage.setItem("shadowos_lead_email", email);
+      // auto-create demo session
+      localStorage.setItem("shadowos_user", JSON.stringify({ email: email, createdAt: Date.now(), tier: "demo" }));
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+
+<svg width="220" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
+  <rect rx="8" width="40" height="40" fill="#22c55e"/>
+  <text x="20" y="26" font-size="20" text-anchor="middle" fill="#022c22" font-family="Arial">S</text>
+  <text x="55" y="28" font-size="22" fill="#e5e7eb" font-family="Arial">ShadowOS</text>
+</svg>
