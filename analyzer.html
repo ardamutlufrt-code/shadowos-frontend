@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<script>
+function saveLink() {
+  const input = document.querySelector('input[type="url"]');
+  if (input) {
+    localStorage.setItem("shadowos_ig_url", input.value);
+  }
+}
+</script><!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
@@ -236,9 +243,10 @@
 
   <p><strong>Fiyat: 149 TL (tek seferlik)</strong></p>
 
-<a href='https://buy.stripe.com/test_bJe9ANbU97TQ8b487Q6Vq03'target="_blank">
- <a href="https://buy.stripe.com/test_dRmcMZ2jz4HE8b41Js6Vq04" target="_blank">
-<!-- 👇 BURAYA EKLE -->
+<a href='https://buy.stripe.com/test_bJe9ANbU97TQ8b487Q6Vq03'target="_blank"
+   onclick="saveLink()">
+ 
+
 <div style="margin:16px 0; text-align:center;">
   <div style="
     display:inline-block;
@@ -273,5 +281,13 @@
     Bu rapor AI desteklidir, yönlendirici niteliktedir.
   </p>
 </section>
-</body>
+<script>
+window.addEventListener("load", () => {
+  const url = localStorage.getItem("shadowos_ig_url");
+  const input = document.querySelector('input[type="url"]');
+  if (url && input) {
+    input.value = url;
+  }
+});
+</script> </body>
 </html>
