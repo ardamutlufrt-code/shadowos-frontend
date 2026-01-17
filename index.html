@@ -30,8 +30,39 @@
   font-weight: 700;
   margin-left: 6px;
 }
+</style><style>
+#limited-offer-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ff4d4f;
+  color: white;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 99999;
+}
+
+#limited-offer-banner .old-price {
+  text-decoration: line-through;
+  opacity: 0.85;
+  margin-left: 6px;
+}
+
+#limited-offer-banner .new-price {
+  margin-left: 6px;
+  font-weight: 800;
+}
 </style></head>
-<body>
+<body><div id="limited-offer-banner">
+  🔥 LIMITED OFFER —
+  <span class="old-price">$30</span>
+  <span class="new-price">$19</span>
+</div>
+
+<div style="height:52px;"></div>
   <header class="nav nav--glass">
     <div class="nav__left">
       <img src="logo.svg" alt="ShadowOS" class="logo" />
