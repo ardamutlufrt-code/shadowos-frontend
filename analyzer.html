@@ -379,5 +379,44 @@
   });
 </script>
 
-</body>
+<script>
+  const API_BASE = "https://shadowos-backend.onrender.com";
+
+  const analyzeBtn = document.querySelector("button");
+  const urlInput = document.querySelector('input[type="url"]');
+
+  analyzeBtn.addEventListener("click", async () => {
+    const igUrl = urlInput.value.trim();
+
+    if (!igUrl || !igUrl.includes("instagram.com")) {
+      alert("Please enter a valid Instagram profile URL.");
+      return;
+    }
+
+    analyzeBtn.disabled = true;
+    analyzeBtn.innerText = "Analyzing...";
+
+    try {
+      const res = await fetch(API_BASE + "/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: igUrl })
+      });
+
+      if (!res.ok) {
+        throw new Error("Server error");
+      }
+
+      const data = await res.json();
+
+      alert(data.result || "Analysis completed.");
+
+    } catch (err) {
+      alert("Could not reach AI server. Please try again.");
+    } finally {
+      analyzeBtn.disabled = false;
+      analyzeBtn.innerText = "Analyze with AI";
+    }
+  });
+</script> </body>
 </html>
