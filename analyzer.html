@@ -1,312 +1,437 @@
-<script>
-function saveLink() {
-  const input = document.querySelector('input[type="url"]');
-  if (input) {
-    localStorage.setItem("shadowos_ig_url", input.value);
-  }
-}
-</script><!DOCTYPE html>
-<html lang="tr">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ShadowOS — AI Instagram Analyzer</title>
-  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root{
+      --bg1:#060b14;
+      --bg2:#0a1b2e;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --accent:#22c55e;
+      --danger:#ef4444;
+      --warn:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 700px at 20% 0%, #0b3b2a40, transparent 55%),
+        radial-gradient(800px 600px at 90% 20%, #2b3fff35, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 18px;
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius:10px;
+      background:linear-gradient(135deg, rgba(34,197,94,.35), rgba(59,130,246,.25));
+      border:1px solid var(--border);
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:13px;
+      text-decoration:none;
+    }
+    .wrap{
+      max-width:960px;
+      margin:0 auto;
+      padding:10px 18px 28px;
+    }
+    .hero{
+      padding:18px 0 10px;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:1.15;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      max-width:62ch;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      margin-top:18px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr;}
+    }
+    .card{
+      border:1px solid var(--border);
+      background: var(--card);
+      border-radius:16px;
+      padding:16px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+    }
+    label{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      margin:12px 0 8px;
+    }
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+    }
+    input:focus{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+    button{
+      cursor:pointer;
+      border:none;
+      padding:12px 14px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:14px;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(34,197,94,.95), rgba(34,197,94,.75));
+      color:#05110b;
+      min-width: 180px;
+    }
+    .btn-ghost{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+    }
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:10px;
+      line-height:1.55;
+    }
+    .badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      color:var(--muted);
+      font-size:12px;
+      margin-right:8px;
+    }
+    .offer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(34,197,94,.35);
+      background: rgba(34,197,94,.08);
+      margin-top:12px;
+    }
+    .offer strong{font-size:14px}
+    .price{
+      text-align:right;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .price s{opacity:.7}
+    .price b{color:var(--text); font-size:16px}
+    .result{
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:13px;
+      line-height:1.5;
+      max-height: 520px;
+      overflow:auto;
+    }
+    .status{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .status.ok{color: rgba(34,197,94,.95);}
+    .status.err{color: rgba(239,68,68,.95);}
+    .status.warn{color: rgba(245,158,11,.95);}
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .split{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      margin-top:8px;
+    }
+  </style>
 </head>
+
 <body>
-  <header class="nav nav--glass">
-    <div class="nav__left">
-      <img src="logo.svg" alt="ShadowOS" class="logo" />
-      <span class="brand">ShadowOS</span>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">S</div>
+      <div>ShadowOS</div>
     </div>
-    <div class="nav__right">
-      <a href="dashboard.html" class="btn btn--ghost">Panele dön</a>
-    </div>
-  </header>
+    <a class="pill" href="./dashboard.html">Back to Panel</a>
+  </div>
 
-  <main class="section">
-    <div class="pageHeader">
-      <div>
-        <h1>AI Instagram Kanal Analizi</h1>
-        <p class="muted">Sadece linki ver. Nişi, konuları, eksikleri, 3 paketli ürünü ve 30 günlük içerik planını AI çıkarsın.</p>
+  <div class="wrap">
+    <div class="hero">
+      <h1>AI Instagram Channel Analysis</h1>
+      <p class="sub">
+        Paste an Instagram profile link. The AI will infer the niche, topics, content gaps, a simple digital product idea,
+        and a 30-day content plan.
+      </p>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <h2>Analyzer</h2>
+
+        <label for="igUrl">Instagram Profile URL</label>
+        <input id="igUrl" type="url" placeholder="https://www.instagram.com/username/" autocomplete="off" />
+
+        <label for="apiBase">AI Server (Render)</label>
+        <input id="apiBase" type="url" placeholder="https://shadowos-backend.onrender.com" />
+
+        <div class="row">
+          <button id="analyzeBtn" class="btn-primary">Analyze with AI</button>
+          <button id="clearBtn" class="btn-ghost">Clear</button>
+        </div>
+
+        <div id="status" class="status">Ready.</div>
+
+        <div id="result" class="result" style="display:none;"></div>
+
+        <div class="hint">
+          Tip: If you use Stripe and return back here after payment, your Instagram link will stay saved automatically.
+        </div>
       </div>
-    </div>
 
-    <div class="card card--soft">
-      <form id="analyzeForm" class="form">
-        <label class="label">Instagram Linki</label>
-        <input id="link" placeholder="https://instagram.com/kullaniciadi" required />
-        <label class="label">AI Sunucu Adresi</label>
-        <input id="apiBase" placeholder= https://shadowos-backend.onrender.com value=https://shadowos-backend.onrender.com
-        <button class="btn btn--block" type="submit">AI ile İncele</button>
-        <p class="muted tiny" style="margin-top:10px">
-          Not: “Çok profesyonel + aynı cevap yok” için analiz artık backend’de OpenAI ile üretilir.
+      <!-- RIGHT -->
+      <div class="card">
+        <h2>What you get</h2>
+
+        <div class="split">
+          <span class="badge">Niche</span>
+          <span class="badge">Topics</span>
+          <span class="badge">Gaps</span>
+          <span class="badge">Product idea</span>
+          <span class="badge">30-day plan</span>
+        </div>
+
+        <div class="offer">
+          <div>
+            <strong>LIMITED OFFER</strong>
+            <div class="small">One-time analysis. Instant result on this page.</div>
+          </div>
+          <div class="price">
+            <div><s>$30</s> <b>$19</b></div>
+            <div class="small">test price / change later</div>
+          </div>
+        </div>
+
+        <p class="small" style="margin-top:12px;">
+          Note: The accuracy depends on what public data can be read from the Instagram page. If Instagram blocks scraping,
+          the AI will still generate a best-effort strategy based on available page metadata.
         </p>
-      </form>
-    </div>
-
-    <div id="loading" class="card card--outline" style="display:none;margin-top:14px">
-      <div class="kicker">⏳ İşleniyor</div>
-      <h3>Shadow Operator çalışıyor…</h3>
-      <p class="muted">Instagram meta verileri okunuyor ve AI analiz üretiyor. (10–30 sn sürebilir)</p>
-    </div>
-
-    <div id="errorBox" class="card card--outline" style="display:none;margin-top:14px">
-      <div class="kicker">⚠️ Hata</div>
-      <h3>İstek başarısız</h3>
-      <p class="muted" id="errorText"></p>
-    </div>
-
-    <div id="output" style="display:none;margin-top:14px">
-      <div class="grid2">
-        <div class="card">
-          <div class="kicker">🧠 Tespit</div>
-          <h3>Niş & Kitle</h3>
-          <div id="detected" class="muted"></div>
-        </div>
-        <div class="card">
-          <div class="kicker">🧩 Eksikler</div>
-          <h3>Gap Analizi</h3>
-          <div id="gaps" class="muted"></div>
-        </div>
-      </div>
-
-      <div class="card card--outline" style="margin-top:12px">
-        <div class="kicker">📚 Konu Kümeleri</div>
-        <h3>Kanal hangi konularda içerik üretiyor?</h3>
-        <div id="clusters" class="muted"></div>
-      </div>
-
-      <div class="card card--outline" style="margin-top:12px">
-        <div class="kicker">💿 3 Paketli Dijital Ürün</div>
-        <h3>Ucuz (PDF) → Orta (Video) → Premium (1:1)</h3>
-        <div id="products" class="muted"></div>
-      </div>
-
-      <div class="card card--outline" style="margin-top:12px">
-        <div class="kicker">🎥 30 Gün İçerik Planı</div>
-        <h3>Başlık + Hook + Kısa senaryo + CTA</h3>
-        <div id="plan" class="muted"></div>
       </div>
     </div>
-  </main>
+  </div>
 
   <script>
-    const userRaw = localStorage.getItem("shadowos_user");
-    if(!userRaw){ window.location.href = "login.html"; }
+    // ---------------------------
+    // CONFIG
+    // ---------------------------
+    const DEFAULT_API_BASE = "https://shadowos-backend.onrender.com";
+    const STORAGE_KEY_URL = "shadowos_ig_url";
+    const STORAGE_KEY_API = "shadowos_api_base";
 
-    const $ = (id) => document.getElementById(id);
+    // ---------------------------
+    // DOM
+    // ---------------------------
+    const igUrlEl   = document.getElementById("igUrl");
+    const apiBaseEl = document.getElementById("apiBase");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const clearBtn   = document.getElementById("clearBtn");
+    const statusEl   = document.getElementById("status");
+    const resultEl   = document.getElementById("result");
 
-    function esc(s){
-      return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+    // ---------------------------
+    // Helpers
+    // ---------------------------
+    function setStatus(text, type="") {
+      statusEl.className = "status" + (type ? " " + type : "");
+      statusEl.textContent = text;
     }
 
-    function list(items){
-      if(!Array.isArray(items) || items.length===0) return "<span class='muted'>—</span>";
-      return "<ul>" + items.map(x => "<li>"+esc(x)+"</li>").join("") + "</ul>";
+    function showResult(text) {
+      resultEl.style.display = "block";
+      resultEl.textContent = text;
     }
 
-    function render(data){
-      const d = data || {};
-      const audience = d.audience || {};
-      const clusters = Array.isArray(d.topic_clusters) ? d.topic_clusters : [];
-      const ladder = d.product_ladder || {};
-      const plan = Array.isArray(d.content_plan_30d) ? d.content_plan_30d : [];
-
-      $("detected").innerHTML = `
-        <p><b>Niş:</b> ${esc(d.detected_niche || "—")}</p>
-        <p><b>Kitle:</b> ${esc(audience.who || "—")}</p>
-        <p><b>Seviye:</b> ${esc(audience.level || "—")}</p>
-        <p><b>Ana ağrılar:</b> ${list(audience.main_pain_points)}</p>
-        <p><b>Konumlandırma:</b> ${esc(d.positioning_sentence || "—")}</p>
-      `;
-
-      $("gaps").innerHTML = list(d.missing_gaps);
-
-      $("clusters").innerHTML = clusters.length
-        ? "<div class='grid2'>" + clusters.map(c => `
-            <div class='card card--soft'>
-              <div class='kicker'>${esc(c.cluster)} • ${esc(c.weight_pct)}%</div>
-              <div class='muted'>Örnek açılar:${list(c.example_angles)}</div>
-            </div>
-          `).join("") + "</div>"
-        : "<span class='muted'>—</span>";
-
-      const entry = ladder.entry_pdf || {};
-      const mid = ladder.mid_video || {};
-      const prem = ladder.premium_1on1 || {};
-
-      $("products").innerHTML = `
-        <div class="grid3">
-          <div class="card card--soft">
-            <div class="kicker">🟢 Giriş (Ucuz)</div>
-            <h4>${esc(entry.name || "PDF / Rehber")}</h4>
-            <p class="muted small"><b>Fiyat:</b> ${esc(entry.price_range || "—")}</p>
-            <div class="muted small"><b>İçerik:</b>${list(entry.deliverables)}</div>
-            <div class="muted small"><b>Outline:</b>${list(entry.outline)}</div>
-          </div>
-          <div class="card card--soft">
-            <div class="kicker">🟡 Orta (Video)</div>
-            <h4>${esc(mid.name || "Video Eğitim")}</h4>
-            <p class="muted small"><b>Fiyat:</b> ${esc(mid.price_range || "—")}</p>
-            <div class="muted small"><b>Modüller:</b>${
-              Array.isArray(mid.modules) && mid.modules.length
-                ? "<ul>"+mid.modules.map(m=>`<li><b>${esc(m.title)}</b> (${esc(m.minutes)} dk) — ${esc(m.outcome)}</li>`).join("")+"</ul>"
-                : "<span class='muted'>—</span>"
-            }</div>
-            <div class="muted small"><b>Bonus:</b>${list(mid.bonuses)}</div>
-          </div>
-          <div class="card card--soft">
-            <div class="kicker">🔴 Premium (1:1)</div>
-            <h4>${esc(prem.name || "1:1 Görüşme")}</h4>
-            <p class="muted small"><b>Fiyat:</b> ${esc(prem.price_range || "—")}</p>
-            <div class="muted small"><b>Kimin için:</b>${list(prem.who_its_for)}</div>
-            <p class="muted small"><b>Format:</b> ${esc(prem.format || "—")}</p>
-            <div class="muted small"><b>Görüşme akışı:</b>${list(prem.call_structure)}</div>
-          </div>
-        </div>
-      `;
-
-      $("plan").innerHTML = plan.length
-        ? "<div class='card card--soft'><div class='muted small'>Toplam: "+plan.length+" gün</div></div>"
-          + "<div style='margin-top:10px' class='grid2'>" + plan.slice(0, 30).map(p => `
-              <div class="card card--soft">
-                <div class="kicker">Gün ${esc(p.day)}</div>
-                <h4>${esc(p.title)}</h4>
-                <p class="muted small"><b>Hook:</b> ${esc(p.hook)}</p>
-                <p class="muted small"><b>Senaryo:</b> ${esc(p.script)}</p>
-                <p class="muted small"><b>CTA:</b> ${esc(p.cta)}</p>
-              </div>
-            `).join("") + "</div>"
-        : "<span class='muted'>—</span>";
+    function hideResult() {
+      resultEl.style.display = "none";
+      resultEl.textContent = "";
     }
 
-    $("analyzeForm").addEventListener("submit", async function(e){
+    function normalizeInstagramUrl(url) {
+      let u = (url || "").trim();
+      if (!u) return "";
+      if (!u.startsWith("http")) u = "https://" + u;
+      // Basic safety: enforce instagram.com domain if possible
+      try {
+        const parsed = new URL(u);
+        // Accept instagram.com or www.instagram.com
+        if (!parsed.hostname.includes("instagram.com")) return "";
+        return parsed.toString();
+      } catch {
+        return "";
+      }
+    }
+
+    function normalizeApiBase(url) {
+      let u = (url || "").trim();
+      if (!u) return DEFAULT_API_BASE;
+      if (!u.startsWith("http")) u = "https://" + u;
+      // remove trailing slash
+      if (u.endsWith("/")) u = u.slice(0, -1);
+      return u;
+    }
+
+    // ---------------------------
+    // Restore saved state
+    // ---------------------------
+    (function init(){
+      const savedUrl = localStorage.getItem(STORAGE_KEY_URL);
+      const savedApi = localStorage.getItem(STORAGE_KEY_API);
+
+      igUrlEl.value = savedUrl || "";
+      apiBaseEl.value = savedApi || DEFAULT_API_BASE;
+
+      // Also: if coming back from Stripe with ?url=...
+      const params = new URLSearchParams(window.location.search);
+      const urlParam = params.get("url");
+      if (urlParam) {
+        const normalized = normalizeInstagramUrl(urlParam);
+        if (normalized) {
+          igUrlEl.value = normalized;
+          localStorage.setItem(STORAGE_KEY_URL, normalized);
+        }
+      }
+    })();
+
+    // Keep API base saved
+    apiBaseEl.addEventListener("input", () => {
+      localStorage.setItem(STORAGE_KEY_API, normalizeApiBase(apiBaseEl.value));
+    });
+
+    // Keep IG URL saved
+    igUrlEl.addEventListener("input", () => {
+      const normalized = igUrlEl.value.trim();
+      localStorage.setItem(STORAGE_KEY_URL, normalized);
+    });
+
+    // ---------------------------
+    // Actions
+    // ---------------------------
+    clearBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      $("errorBox").style.display = "none";
-      $("output").style.display = "none";
-      $("loading").style.display = "block";
+      igUrlEl.value = "";
+      hideResult();
+      setStatus("Cleared. Ready.", "");
+      localStorage.removeItem(STORAGE_KEY_URL);
+    });
 
-      const url = $("link").value.trim();
-      const apiBase = $("apiBase").value.trim().replace(/\/$/,"");
+    analyzeBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      hideResult();
+
+      const igUrl = normalizeInstagramUrl(igUrlEl.value);
+      const apiBase = normalizeApiBase(apiBaseEl.value);
+
+      if (!igUrl) {
+        setStatus("Please enter a valid Instagram profile URL (instagram.com/...).", "warn");
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEY_URL, igUrl);
+      localStorage.setItem(STORAGE_KEY_API, apiBase);
+
+      setStatus("Analyzing... (this can take a few seconds)", "");
 
       try {
-        const r = await fetch(apiBase + "/api/analyze", {
-          method:"POST",
-          headers: { "content-type":"application/json" },
-          body: JSON.stringify({ url })
+        const resp = await fetch(apiBase + "/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: igUrl })
         });
-        const j = await r.json();
-        if(!r.ok){
-          throw new Error(j?.error || "Bilinmeyen hata");
+
+        let data = null;
+        try { data = await resp.json(); } catch { /* ignore */ }
+
+        if (!resp.ok) {
+          const msg = (data && (data.error || data.message)) ? (data.error || data.message) : "Request failed.";
+          setStatus("Analysis failed: " + msg, "err");
+          showResult(JSON.stringify(data || { error: msg }, null, 2));
+          return;
         }
-        if(j?.data?.error){
-          throw new Error(j.data.error);
-        }
-        render(j.data);
-        $("loading").style.display = "none";
-        $("output").style.display = "block";
-      } catch(err){
-        $("loading").style.display = "none";
-        $("errorText").textContent = String(err?.message || err);
-        $("errorBox").style.display = "block";
+
+        // backend might return { result: "..."} or structured JSON
+        const output =
+          (data && typeof data.result === "string") ? data.result :
+          (data ? JSON.stringify(data, null, 2) : "No data.");
+
+        setStatus("Done ✅", "ok");
+        showResult(output);
+
+      } catch (err) {
+        setStatus("Server connection error. Check API URL / CORS / Render status.", "err");
+        showResult(String(err));
       }
     });
-  </script>. <script>
-  const params = new URLSearchParams(window.location.search);
-  const paid = params.get("paid");
-
-  if (paid === "true") {
-    // ödeme yapılmışsa analiz otomatik başlasın
-    setTimeout(() => {
-      const analyzeBtn = document.getElementById("analyze-btn");
-      if (analyzeBtn) analyzeBtn.click();
-    }, 1000);
-  }
-</script> <section id="payment-section" style="max-width:720px; margin:40px auto; padding:24px; border:1px solid #ddd; border-radius:12px;">
-  <h2>🔒 Kişiye Özel Instagram Strateji Analizi</h2>
-
-  <p>
-    Instagram hesabın için <strong>AI tarafından hazırlanmış</strong>,
-    tamamen sana özel bir strateji raporu alıyorsun.
-  </p>
-
-  <ul>
-    <li>✔️ Net niş tespiti</li>
-    <li>✔️ İçerik analizi (kanıta dayalı)</li>
-    <li>✔️ Eksik kalan ama büyüme getiren konular</li>
-    <li>✔️ 30 günlük içerik planı</li>
-    <li>✔️ Dijital ürüne dönüştürülebilir fikirler</li>
-  </ul>
-
-  <p><strong>📄 Rapor PDF olarak teslim edilir.</strong></p>
-
-  <p><strong>Fiyat: 149 TL (tek seferlik)</strong></p>
-
-<a href='https://buy.stripe.com/test_bJe9ANbU97TQ8b487Q6Vq03'target="_blank"
-   onclick="saveLink()">
- 
-
-<div style="margin:16px 0; text-align:center;">
-  <div style="
-    display:inline-block;
-    background:#ff4d4f;
-    color:white;
-    font-size:12px;
-    padding:4px 10px;
-    border-radius:20px;
-    margin-bottom:8px;
-    font-weight:600;
-  ">
-    LIMITED OFFER
-  </div>
-
-  <div style="font-size:20px; margin-top:6px;">
-    <span style="text-decoration:line-through; opacity:0.6;">$30</span>
-    <span style="font-weight:700; margin-left:8px;">$19</span>
-  </div>
-</div>
-
-<!-- 👇 BUTON -->
-<a href="BURAYA_STRIPE_LINKİN" target="_blank">
-  <button style="padding:12px 20px; font-size:16px;">
-    Analizi Satın Al ve PDF’ini Al
-  </button>
-</a>  <button style="padding:12px 20px; font-size:16px;">
-    Analizi Satın Al ve PDF’ini Al
-  </button>
-</a>
-
-  <p style="font-size:12px; margin-top:12px; color:#666;">
-    Bu rapor AI desteklidir, yönlendirici niteliktedir.
-  </p>
-</section>
-<script>
-window.addEventListener("load", () => {
-  const url = localStorage.getItem("shadowos_ig_url");
-  const input = document.querySelector('input[type="url"]');
-  if (url && input) {
-    input.value = url;
-  }
-});
-</script><script>
-  // 1) Backend URL (Render)
-  const API_BASE = "https://shadowos-backend.onrender.com";
-
-  // 2) DOM
-  const igInput = document.querySelector('input[type="url"]');
-  const analyzeBtn = document.querySelector('button, .btn, input[type="submit"]');
-  const resultBox = document.createElement("div");
-
-  resultBox.style.marginTop = "14px";
-  resultBox.style.padding = "14px";
-  resultBox.style.border = "1px solid rgba(255,255,255,0.12)";
-  resultBox.style.borderRadius = "14px";
-  resultBox.style.background = "rgba(0,0,0,0.25)";
-  resultBox.style.whiteSpace = "pre-wrap";
-  resultBox.style.color = "white";
-  resultBox.style.fontSize = "14px";
-
-  // input'un altında göster
-  if </body>
+  </script>
+</body>
 </html>
