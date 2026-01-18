@@ -289,5 +289,24 @@ window.addEventListener("load", () => {
     input.value = url;
   }
 });
-</script> </body>
+</script><script>
+  // 1) Backend URL (Render)
+  const API_BASE = "https://shadowos-backend.onrender.com";
+
+  // 2) DOM
+  const igInput = document.querySelector('input[type="url"]');
+  const analyzeBtn = document.querySelector('button, .btn, input[type="submit"]');
+  const resultBox = document.createElement("div");
+
+  resultBox.style.marginTop = "14px";
+  resultBox.style.padding = "14px";
+  resultBox.style.border = "1px solid rgba(255,255,255,0.12)";
+  resultBox.style.borderRadius = "14px";
+  resultBox.style.background = "rgba(0,0,0,0.25)";
+  resultBox.style.whiteSpace = "pre-wrap";
+  resultBox.style.color = "white";
+  resultBox.style.fontSize = "14px";
+
+  // input'un altında göster
+  if </body>
 </html>
