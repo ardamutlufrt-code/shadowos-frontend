@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ShadowOS • AI Instagram Channel Analysis</title>
+  <title>ShadowOS • AI Instagram Analyzer</title>
   <style>
     :root{
       --bg1:#071022;
       --bg2:#061a2a;
       --card:rgba(255,255,255,0.06);
-      --card2:rgba(255,255,255,0.08);
       --border:rgba(255,255,255,0.12);
       --text:rgba(255,255,255,0.92);
       --muted:rgba(255,255,255,0.65);
@@ -26,4 +25,359 @@
       background:
         radial-gradient(1200px 600px at 20% 20%, rgba(34,197,94,0.12), transparent 60%),
         radial-gradient(900px 500px at 80% 30%, rgba(59,130,246,0.14), transparent 55%),
-        linear-gradient(
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 22px;
+    }
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800}
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(135deg, rgba(34,197,94,1), rgba(59,130,246,1));
+      display:inline-block;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn:hover{background:rgba(255,255,255,0.10)}
+    .container{max-width:1080px;margin:0 auto;padding:12px 22px 70px;}
+    h1{margin:18px 0 6px;font-size:34px}
+    .sub{color:var(--muted);max-width:760px;line-height:1.5}
+    .grid{margin-top:22px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:18px;}
+    @media (max-width: 920px){.grid{grid-template-columns:1fr;}}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2{margin:0 0 10px;font-size:16px;letter-spacing:0.2px}
+    label{display:block;color:var(--muted);font-size:13px;margin:14px 0 8px}
+    input{
+      width:100%;
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.14);
+      color:var(--text);
+      padding:12px 12px;
+      border-radius:14px;
+      outline:none;
+      font-size:14px;
+    }
+    input:focus{border-color:rgba(34,197,94,0.65);box-shadow:0 0 0 4px rgba(34,197,94,0.10);}
+    input[readonly]{opacity:0.9}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center;}
+    .primary{
+      background:linear-gradient(180deg, var(--green), var(--green2));
+      color:#08101f;border:none;padding:12px 16px;border-radius:14px;font-weight:900;cursor:pointer;
+    }
+    .primary:disabled{opacity:0.55;cursor:not-allowed;}
+    .ghost{
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      padding:12px 16px;border-radius:14px;color:var(--text);font-weight:800;cursor:pointer;
+    }
+    .status{margin-top:12px;color:var(--muted);font-size:13px;}
+    .pill{
+      display:inline-flex;align-items:center;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.06);
+      padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted);
+      margin-right:6px;margin-top:8px;
+    }
+    .offerBox{
+      border:1px solid rgba(34,197,94,0.35);
+      background:rgba(34,197,94,0.07);
+      border-radius:16px;padding:14px;margin-top:12px;
+    }
+    .offerHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .offerTitle{font-weight:900;letter-spacing:0.3px;}
+    .price{display:flex;align-items:baseline;gap:8px;font-weight:900;}
+    .strike{text-decoration:line-through;opacity:0.55;font-weight:800;}
+    .buyBtn{
+      margin-top:12px;display:inline-block;width:100%;text-align:center;
+      padding:12px 14px;border-radius:14px;
+      background:linear-gradient(180deg, var(--green), var(--green2));
+      color:#08101f;font-weight:1000;text-decoration:none;
+    }
+    .buyBtn:hover{filter:brightness(1.03);}
+    .note{margin-top:12px;font-size:12px;color:rgba(255,255,255,0.62);line-height:1.45;}
+    .result{
+      margin-top:16px;padding:14px;border-radius:16px;border:1px solid var(--border);
+      background:rgba(0,0,0,0.22);white-space:pre-wrap;word-wrap:break-word;
+      font-size:13px;line-height:1.5;
+    }
+    .warn{
+      display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(245,158,11,0.35);background:rgba(245,158,11,0.08);
+      color:rgba(255,255,255,0.85);margin-top:10px;font-size:13px;
+    }
+    .err{
+      display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.08);
+      color:rgba(255,255,255,0.88);margin-top:10px;font-size:13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <span class="logo"></span>
+      <span>ShadowOS</span>
+    </div>
+    <a class="btn" href="./dashboard.html">Back to Panel</a>
+  </div>
+
+  <div class="container">
+    <h1>AI Instagram Channel Analysis</h1>
+    <div class="sub">
+      Paste an Instagram profile link. After purchase, the AI will infer the niche, topics, content gaps,
+      a simple digital product idea, and a 30-day content plan.
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <h2>Analyzer</h2>
+
+        <label for="igUrl">Instagram Profile URL</label>
+        <input id="igUrl" type="url" placeholder="https://www.instagram.com/username/" autocomplete="off" />
+
+        <label for="apiBase">AI Server (Render)</label>
+        <!-- Render link LOCKED (cannot be edited) -->
+        <input id="apiBase" type="url" value="https://shadowos-backend.onrender.com" readonly />
+
+        <div class="row">
+          <button id="analyzeBtn" class="primary">Analyze with AI</button>
+          <button id="clearBtn" class="ghost">Clear</button>
+        </div>
+
+        <div id="status" class="status">Ready.</div>
+
+        <div id="paidBanner" class="warn" style="display:none;">
+          ✅ Payment detected. Running analysis now...
+        </div>
+
+        <div id="errorBox" class="err" style="display:none;"></div>
+
+        <div id="result" class="result" style="display:none;"></div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <h2>What you get</h2>
+        <div>
+          <span class="pill">Niche</span>
+          <span class="pill">Topics</span>
+          <span class="pill">Gaps</span>
+          <span class="pill">Product idea</span>
+          <span class="pill">30-day plan</span>
+        </div>
+
+        <div class="offerBox">
+          <div class="offerHeader">
+            <div class="offerTitle">LIMITED OFFER</div>
+            <div class="price">
+              <span class="strike">$30</span>
+              <span>$19</span>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top:6px;">
+            One-time analysis. Instant result on this page.
+          </div>
+
+          <!-- BUY under LIMITED OFFER -->
+          <a id="buyBtn"
+             class="buyBtn"
+             href="https://buy.stripe.com/test_dRmcMZ2jz4HE8b41Js6Vq04"
+             target="_blank"
+             rel="noopener">
+            BUY
+          </a>
+
+          <div class="note">
+            Tip: Your Instagram link is saved automatically before opening Stripe.
+            After payment, return here and the analysis will run.
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+          Accuracy depends on what public data can be read from Instagram. If Instagram blocks scraping,
+          the AI still generates a best-effort strategy based on available page metadata.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ---------- SETTINGS ----------
+  const STORAGE_KEY = "shadowos_ig_url";
+
+  const apiBaseEl = document.getElementById("apiBase");
+  const igUrlEl = document.getElementById("igUrl");
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const buyBtn = document.getElementById("buyBtn");
+
+  const statusEl = document.getElementById("status");
+  const resultEl = document.getElementById("result");
+  const errorBox = document.getElementById("errorBox");
+  const paidBanner = document.getElementById("paidBanner");
+
+  function setStatus(msg){ statusEl.textContent = msg; }
+  function showError(msg){
+    errorBox.style.display = "inline-flex";
+    errorBox.textContent = "❌ " + msg;
+  }
+  function clearError(){
+    errorBox.style.display = "none";
+    errorBox.textContent = "";
+  }
+  function showResult(obj){
+    resultEl.style.display = "block";
+    try{
+      if (typeof obj === "string") resultEl.textContent = obj;
+      else resultEl.textContent = JSON.stringify(obj, null, 2);
+    } catch {
+      resultEl.textContent = String(obj);
+    }
+  }
+  function hideResult(){
+    resultEl.style.display = "none";
+    resultEl.textContent = "";
+  }
+
+  function normalizeUrl(u){
+    const url = (u || "").trim();
+    if (!url) return "";
+    if (!/^https?:\/\//i.test(url)) return "https://" + url;
+    return url;
+  }
+
+  function isInstagramUrl(u){
+    try{
+      const x = new URL(u);
+      return /(^|\.)instagram\.com$/i.test(x.hostname);
+    } catch {
+      return false;
+    }
+  }
+
+  function saveIg(){
+    const v = normalizeUrl(igUrlEl.value);
+    if (v) localStorage.setItem(STORAGE_KEY, v);
+  }
+
+  function loadIg(){
+    const v = localStorage.getItem(STORAGE_KEY);
+    if (v) igUrlEl.value = v;
+  }
+
+  async function runAnalyze(){
+    clearError();
+    hideResult();
+
+    const apiBase = (apiBaseEl.value || "").trim().replace(/\/+$/,"");
+    const igUrl = normalizeUrl(igUrlEl.value);
+
+    if (!igUrl){
+      showError("Please paste an Instagram profile URL.");
+      return;
+    }
+    if (!isInstagramUrl(igUrl)){
+      showError("That doesn't look like an instagram.com URL.");
+      return;
+    }
+
+    // ensure it never disappears
+    localStorage.setItem(STORAGE_KEY, igUrl);
+
+    analyzeBtn.disabled = true;
+    setStatus("Analyzing… please wait.");
+
+    try{
+      const resp = await fetch(apiBase + "/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: igUrl })
+      });
+
+      const raw = await resp.text();
+      let data;
+      try { data = JSON.parse(raw); } catch { data = raw; }
+
+      if (!resp.ok){
+        const msg = (data && data.error) ? data.error : ("Server error (" + resp.status + ")");
+        showError(msg);
+        setStatus("Failed.");
+        return;
+      }
+
+      setStatus("Done.");
+      showResult(data);
+
+    } catch (e){
+      showError("Could not reach the AI server. Check Render is live and CORS is enabled.");
+      setStatus("Failed.");
+    } finally {
+      analyzeBtn.disabled = false;
+      paidBanner.style.display = "none";
+    }
+  }
+
+  // ---------- EVENTS ----------
+  window.addEventListener("load", () => {
+    loadIg();
+
+    // Payment return handling: analyzer.html?paid=1
+    const qs = new URLSearchParams(location.search);
+    if (qs.get("paid") === "1"){
+      paidBanner.style.display = "inline-flex";
+      setStatus("Payment detected. Starting analysis…");
+      setTimeout(() => runAnalyze(), 350);
+    }
+  });
+
+  igUrlEl.addEventListener("input", () => {
+    // live-save on every change
+    saveIg();
+  });
+
+  analyzeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    runAnalyze();
+  });
+
+  clearBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem(STORAGE_KEY);
+    igUrlEl.value = "";
+    clearError();
+    hideResult();
+    setStatus("Cleared.");
+  });
+
+  // Save URL before opening Stripe
+  buyBtn.addEventListener("click", () => {
+    saveIg();
+  });
+</script>
+
+</body>
+</html>
